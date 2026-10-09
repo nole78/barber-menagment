@@ -2,6 +2,7 @@ using System.Security.Claims;
 using BarberMenagment.Data;
 using BarberMenagment.Models;
 using BarberMenagment.Models.Barber;
+using BarberMenagment.Models.Booking;
 using BarberMenagment.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -332,7 +333,7 @@ public class BarberController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> InternalBooking(DateOnly? date, int? serviceId)
+    public async Task<IActionResult> InternalBooking(DateOnly? date, int? serviceId, int? year, int? month)
     {
         var barber = await GetCurrentBarberAsync();
         if (barber is null)
@@ -341,7 +342,24 @@ public class BarberController(
         }
 
         var services = await GetServiceOptionsAsync(barber.Id);
-        var selectedDate = date ?? DateOnly.FromDateTime(DateTime.Today);
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var currentMonth = new DateOnly(today.Year, today.Month, 1);
+        var nextMonth = currentMonth.AddMonths(1);
+        var requestedMonth = year.HasValue && month.HasValue
+            ? new DateOnly(year.Value, month.Value, 1)
+            : date.HasValue
+                ? new DateOnly(date.Value.Year, date.Value.Month, 1)
+                : currentMonth;
+        if (requestedMonth != currentMonth && requestedMonth != nextMonth)
+        {
+            return BadRequest("Dostupni su samo tekući i naredni mesec.");
+        }
+
+        var selectedDate = date ?? (requestedMonth == currentMonth ? today : requestedMonth);
+        if (selectedDate < requestedMonth || selectedDate >= requestedMonth.AddMonths(1))
+        {
+            return BadRequest("Izabrani datum nije u traženom mesecu.");
+        }
         var selectedServiceId = serviceId ?? services.FirstOrDefault()?.Id;
         var slots = selectedServiceId.HasValue
             ? await availabilityService.GetAvailableSlotsAsync(
@@ -351,12 +369,34 @@ public class BarberController(
                 DateTime.Now)
             : [];
 
+        var days = new List<CalendarDayViewModel>();
+        for (var index = 0; index < DateTime.DaysInMonth(requestedMonth.Year, requestedMonth.Month); index++)
+        {
+            var day = requestedMonth.AddDays(index);
+            var daySlots = selectedServiceId.HasValue
+                ? await availabilityService.GetAvailableSlotsAsync(
+                    barber.Id, selectedServiceId.Value, day, DateTime.Now)
+                : [];
+            days.Add(new CalendarDayViewModel
+            {
+                Date = day,
+                IsToday = day == today,
+                IsSelected = day == selectedDate,
+                IsInCurrentMonth = requestedMonth == currentMonth,
+                HasAvailableSlots = daySlots.Count > 0
+            });
+        }
+
         return View(new InternalBookingViewModel
         {
             BarberName = $"{barber.FirstName} {barber.LastName}",
             Services = services,
             ServiceId = selectedServiceId ?? 0,
             Date = selectedDate,
+            Month = requestedMonth,
+            CurrentMonth = currentMonth,
+            NextMonth = nextMonth,
+            Days = days,
             AvailableSlots = slots
                 .Select(slot => new InternalBookingSlotOption { Start = slot.Start })
                 .ToList()
@@ -430,11 +470,7 @@ public class BarberController(
         await dbContext.SaveChangesAsync();
 
         TempData["SuccessMessage"] = "Interni termin je uspešno sačuvan.";
-        return RedirectToAction(nameof(InternalBooking), new
-        {
-            date = model.Date,
-            serviceId = model.ServiceId
-        });
+        return RedirectToAction(nameof(Appointments));
     }
 
     private async Task<User?> GetCurrentBarberAsync()
@@ -485,7 +521,10 @@ public class BarberController(
             Services = services,
             AvailableSlots = slots
                 .Select(slot => new InternalBookingSlotOption { Start = slot.Start })
-                .ToList()
+                .ToList(),
+            Month = new DateOnly(model.Date.Year, model.Date.Month, 1),
+            CurrentMonth = new DateOnly(DateTime.Today.Year, DateTime.Today.Month, 1),
+            NextMonth = new DateOnly(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1)
         };
     }
 

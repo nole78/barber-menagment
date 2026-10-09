@@ -1,6 +1,8 @@
+@using System.Globalization
 @model IReadOnlyList<BarberMenagment.Models.Barber.ServiceListItemViewModel>
 @{
     ViewData["Title"] = "Usluge";
+    var serbianCulture = new CultureInfo("sr-RS");
 }
 
 <h1>Usluge</h1>
@@ -15,13 +17,21 @@
 <a asp-action="CreateService" class="btn btn-primary mb-3">Dodaj uslugu</a>
 <div class="table-responsive">
     <table class="table align-middle">
-        <thead><tr><th>Naziv</th><th>Cena</th><th>Trajanje</th><th>Frizeri</th><th></th></tr></thead>
+        <thead>
+            <tr>
+                <th style="color: #f28a2e">Naziv</th>
+                <th style="color: #f28a2e">Cena</th>
+                <th style="color: #f28a2e">Trajanje</th>
+                <th style="color: #f28a2e">Frizeri</th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
         @foreach (var service in Model)
         {
             <tr>
                 <td>@service.Name</td>
-                <td>@service.Price.ToString("C")</td>
+                <td>@service.Price.ToString("C", serbianCulture)</td>
                 <td>@service.DurationMinutes min</td>
                 <td>@service.AssignedBarberCount</td>
                 <td class="d-flex gap-2">

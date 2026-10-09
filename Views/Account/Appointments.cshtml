@@ -1,6 +1,8 @@
+@using System.Globalization
 @model IReadOnlyList<BarberMenagment.Models.Booking.ClientAppointmentViewModel>
 @{
     ViewData["Title"] = "Moji termini";
+    var serbianCutlure = new CultureInfo("sr-RS");
 }
 <h1>Moji aktivni termini</h1>
 @if (TempData["SuccessMessage"] is string successMessage)
@@ -19,7 +21,15 @@ else
 {
     <div class="table-responsive">
         <table class="table">
-            <thead><tr><th>Datum i vreme</th><th>Frizer</th><th>Usluga</th><th>Cena</th><th></th></tr></thead>
+            <thead>
+                <tr>
+                    <th style="color: #f28a2e">Datum i vreme</th>
+                    <th style="color: #f28a2e">Frizer</th>
+                    <th style="color: #f28a2e">Usluga</th>
+                    <th style="color: #f28a2e">Cena</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tbody>
             @foreach (var appointment in Model)
             {
@@ -27,7 +37,7 @@ else
                     <td>@appointment.AppointmentDateTime.ToLocalTime().ToString("dd.MM.yyyy. HH:mm")</td>
                     <td>@appointment.BarberName</td>
                     <td>@appointment.ServiceName</td>
-                    <td>@appointment.Price.ToString("C")</td>
+                    <td>@appointment.Price.ToString("C", serbianCutlure)</td>
                     <td>
                         <form asp-action="CancelAppointment" method="post">
                             <input type="hidden" name="id" value="@appointment.Id"/>

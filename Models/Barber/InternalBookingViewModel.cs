@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BarberMenagment.Models.Booking;
 
 namespace BarberMenagment.Models.Barber;
 
@@ -26,6 +27,14 @@ public class InternalBookingViewModel
     public IReadOnlyList<InternalBookingServiceOption> Services { get; init; } = [];
 
     public IReadOnlyList<InternalBookingSlotOption> AvailableSlots { get; init; } = [];
+
+    public DateOnly Month { get; init; }
+
+    public DateOnly CurrentMonth { get; init; }
+
+    public DateOnly NextMonth { get; init; }
+
+    public IReadOnlyList<CalendarDayViewModel> Days { get; init; } = [];
 }
 
 public class InternalBookingServiceOption
@@ -110,7 +119,7 @@ public class ServiceEditViewModel
     public string? Description { get; set; }
 
     [Range(0.01, 100000)]
-    [Display(Name = "Cena")]
+    [Display(Name = "Cena (RSD)")]
     public decimal Price { get; set; }
 
     [Range(1, 1440)]

@@ -1,6 +1,9 @@
+@using System.Globalization
 @model BarberMenagment.Models.Barber.InternalBookingViewModel
 @{
     ViewData["Title"] = "Interno zakazivanje";
+    var previousMonth = Model.Month == Model.NextMonth ? Model.CurrentMonth : (DateOnly?)null;
+    var nextMonth = Model.Month == Model.CurrentMonth ? Model.NextMonth : (DateOnly?)null;
 }
 
 <h1>Interno zakazivanje</h1>
@@ -12,44 +15,77 @@
 }
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<form asp-action="InternalBooking" method="get" class="row g-3 mb-4">
-    <div class="col-md-5">
-        <label asp-for="ServiceId" class="form-label"></label>
+<form asp-action="InternalBooking" method="get" class="mb-4">
+    <div class="col-md-6">
+        <label asp-for="ServiceId" style="color: #f28a2e" class="form-label"></label>
         <select asp-for="ServiceId" class="form-select" asp-items="@(new SelectList(Model.Services, nameof(BarberMenagment.Models.Barber.InternalBookingServiceOption.Id), nameof(BarberMenagment.Models.Barber.InternalBookingServiceOption.Name)))">
             <option value="">Izaberite uslugu</option>
         </select>
     </div>
-    <div class="col-md-4">
-        <label asp-for="Date" class="form-label"></label>
-        <input asp-for="Date" class="form-control"/>
-    </div>
-    <div class="col-md-3 d-flex align-items-end">
-        <button type="submit" class="btn btn-outline-primary w-100">Prikaži slobodne termine</button>
-    </div>
+    <input type="hidden" name="date" value="@Model.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)"/>
+    <button type="submit" class="btn btn-outline-primary mt-3">Prikaži slobodne termine</button>
 </form>
 
-<form asp-action="InternalBooking" method="post">
-    <input asp-for="ServiceId" type="hidden"/>
-    <input asp-for="Date" type="hidden"/>
-    <div class="mb-3">
-        <label asp-for="AppointmentDateTime" class="form-label"></label>
-        <select asp-for="AppointmentDateTime" class="form-select">
-            <option value="">Izaberite termin</option>
-            @foreach (var slot in Model.AvailableSlots)
-            {
-                <option value="@slot.Start.ToString("O")">@slot.DisplayTime</option>
-            }
-        </select>
-        <span asp-validation-for="AppointmentDateTime" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="ClientEmail" class="form-label"></label>
-        <input asp-for="ClientEmail" class="form-control"/>
-        <div class="form-text">Ostavite prazno za neregistrovanog klijenta.</div>
-        <span asp-validation-for="ClientEmail" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Sačuvaj interni termin</button>
-</form>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    @if (previousMonth.HasValue)
+    {
+        <a asp-action="InternalBooking" asp-route-serviceId="@Model.ServiceId" asp-route-year="@previousMonth.Value.Year" asp-route-month="@previousMonth.Value.Month" class="btn btn-outline-secondary">Prethodni mesec</a>
+    }
+    else { <span></span> }
+    <h2 class="h4 mb-0">@Model.Month.ToString("MMMM yyyy")</h2>
+    @if (nextMonth.HasValue)
+    {
+        <a asp-action="InternalBooking" asp-route-serviceId="@Model.ServiceId" asp-route-year="@nextMonth.Value.Year" asp-route-month="@nextMonth.Value.Month" class="btn btn-outline-secondary">Naredni mesec</a>
+    }
+    else { <span></span> }
+</div>
+
+<div class="row row-cols-2 row-cols-md-4 row-cols-lg-7 g-2 mb-4">
+    @foreach (var day in Model.Days)
+    {
+        <div class="col">
+            <a asp-action="InternalBooking" asp-route-serviceId="@Model.ServiceId" asp-route-date="@day.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)" class="card h-100 text-decoration-none @(day.IsSelected ? "border-primary" : "") @(day.HasAvailableSlots ? "" : "opacity-50")">
+                <div class="card-body p-2 text-center">
+                    <div class="small">@day.Date.ToString("ddd")</div>
+                    <strong>@day.Date.Day</strong>
+                    @if (day.IsToday) { <div class="small text-primary">Danas</div> }
+                    <div class="small @(day.HasAvailableSlots ? "text-success" : "text-muted")">@(day.HasAvailableSlots ? "Slobodni termini" : "Nema termina")</div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<h2 class="h4">Slobodni termini za @Model.Date.ToString("dd.MM.yyyy.")</h2>
+@if (Model.AvailableSlots.Count == 0)
+{
+    <div class="alert alert-info">Nema slobodnih termina za ovaj datum.</div>
+}
+else
+{
+    <form asp-action="InternalBooking" method="post">
+        <input asp-for="ServiceId" type="hidden"/>
+        <input asp-for="Date" type="hidden" value="@Model.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)"/>
+        <div class="mb-3">
+            <label asp-for="AppointmentDateTime" style="color: #f28a2e" class="form-label"></label>
+            <select asp-for="AppointmentDateTime" class="form-select">
+                <option value="">Izaberite termin</option>
+                @foreach (var slot in Model.AvailableSlots)
+                {
+                    <option value="@slot.Start.ToString("O")">@slot.DisplayTime</option>
+                }
+            </select>
+            <span asp-validation-for="AppointmentDateTime" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ClientEmail" style="color: #f28a2e" class="form-label"></label>
+            <input asp-for="ClientEmail" class="form-control"/>
+            <div class="form-text">Ostavite prazno za neregistrovanog klijenta.</div>
+            <span asp-validation-for="ClientEmail" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Sačuvaj interni termin</button>
+    </form>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>

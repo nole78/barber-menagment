@@ -32,12 +32,18 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="new-password"/>
+                <div class="input-group">
+                    <input asp-for="Password" class="form-control" autocomplete="new-password"/>
+                    <button type="button" class="btn btn-outline-secondary password-toggle" data-password-toggle="Password" aria-label="Prikaži šifru" aria-pressed="false"></button>
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password"/>
+                <div class="input-group">
+                    <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password"/>
+                    <button type="button" class="btn btn-outline-secondary password-toggle" data-password-toggle="ConfirmPassword" aria-label="Prikaži potvrdu šifre" aria-pressed="false"></button>
+                </div>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>

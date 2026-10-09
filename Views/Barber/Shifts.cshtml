@@ -1,3 +1,4 @@
+@using System.Globalization
 @model BarberMenagment.Models.Barber.BarberShiftViewModel
 @{
     ViewData["Title"] = "Definisanje smene";
@@ -13,12 +14,13 @@
 
 <form asp-action="Shifts" method="post" class="col-md-6">
     <div class="mb-3">
-        <label asp-for="Date" class="form-label"></label>
-        <input asp-for="Date" class="form-control"/>
+        <label asp-for="Date" style="color: #f28a2e" class="form-label"></label>
+        <input id="Date" name="Date" type="date" class="form-control"
+               value="@Model.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)"/>
         <span asp-validation-for="Date" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="ShiftType" class="form-label"></label>
+        <label asp-for="ShiftType" style="color: #f28a2e" class="form-label"></label>
         <select asp-for="ShiftType" class="form-select">
             <option value="@ShiftType.FirstShift">Prva smena (08:00–14:00)</option>
             <option value="@ShiftType.SecondShift">Druga smena (14:00–20:00)</option>
@@ -32,14 +34,20 @@
 <h2 class="h4 mt-5">Buduće smene</h2>
 <div class="table-responsive">
     <table class="table">
-        <thead><tr><th>Datum</th><th>Smena</th><th>Izmena</th></tr></thead>
+        <thead>
+            <tr>
+                <th style="color: #f28a2e">Datum</th>
+                <th style="color: #f28a2e">Smena</th>
+                <th style="color: #f28a2e">Izmena</th>
+            </tr>
+        </thead>
         <tbody>
         @foreach (var shift in Model.UpcomingShifts)
         {
             <tr>
                 <td>@shift.Date.ToString("dd.MM.yyyy.")</td>
                 <td>@(shift.ShiftType == ShiftType.FirstShift ? "Prva smena (08:00–14:00)" : shift.ShiftType == ShiftType.SecondShift ? "Druga smena (14:00–20:00)" : "Slobodan dan")</td>
-                <td><a asp-action="Shifts" asp-route-date="@shift.Date" class="btn btn-sm btn-outline-primary">Izmeni</a></td>
+                <td><a asp-action="Shifts" asp-route-date="@shift.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)" class="btn btn-sm btn-outline-primary">Izmeni</a></td>
             </tr>
         }
         </tbody>

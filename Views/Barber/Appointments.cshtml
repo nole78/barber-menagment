@@ -1,6 +1,8 @@
+@using System.Globalization
 @model IReadOnlyList<BarberMenagment.Models.Barber.BarberAppointmentListItemViewModel>
 @{
     ViewData["Title"] = "Termini";
+    var serbianCulture = new CultureInfo("sr-RS");
 }
 
 <h1>Aktivni budući termini</h1>
@@ -27,7 +29,14 @@ else
     <div class="table-responsive">
         <table class="table align-middle">
             <thead>
-            <tr><th>Datum i vreme</th><th>Klijent</th><th>Usluga</th><th>Tip</th><th>Cena</th><th></th></tr>
+                <tr>
+                    <th style="color: #f28a2e">Datum i vreme</th>
+                    <th style="color: #f28a2e">Klijent</th>
+                    <th style="color: #f28a2e">Usluga</th>
+                    <th style="color: #f28a2e">Tip</th>
+                    <th style="color: #f28a2e">Cena</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
             @foreach (var appointment in Model)
@@ -37,7 +46,7 @@ else
                     <td>@appointment.ClientName</td>
                     <td>@appointment.ServiceName</td>
                     <td>@appointment.AppointmentType</td>
-                    <td>@appointment.Price.ToString("C")</td>
+                    <td>@appointment.Price.ToString("C", serbianCulture)</td>
                     <td>
                         <form asp-action="CancelAppointment" method="post" class="d-flex gap-2">
                             <input type="hidden" name="AppointmentId" value="@appointment.Id"/>

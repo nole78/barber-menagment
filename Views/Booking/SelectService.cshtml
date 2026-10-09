@@ -1,6 +1,8 @@
+@using System.Globalization
 @model BarberMenagment.Models.Booking.ServiceSelectionViewModel
 @{
     ViewData["Title"] = "Choose a service";
+    var serbianCulture = new CultureInfo("sr-RS");
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -17,7 +19,7 @@
                     {
                         <p class="text-muted">@service.Description</p>
                     }
-                    <p class="mb-3">@service.Price.ToString("C") · @service.DurationMinutes minutes</p>
+                    <p class="mb-3">@service.Price.ToString("C", serbianCulture) · @service.DurationMinutes minutes</p>
                     <a asp-action="Calendar"
                        asp-route-barberId="@Model.BarberId"
                        asp-route-serviceId="@service.Id"

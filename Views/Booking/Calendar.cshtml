@@ -1,13 +1,15 @@
+@using System.Globalization
 @model BarberMenagment.Models.Booking.CalendarViewModel
 @{
     ViewData["Title"] = "Choose an appointment time";
     var previousMonth = Model.Month == Model.NextMonth ? Model.CurrentMonth : (DateOnly?)null;
     var nextMonth = Model.Month == Model.CurrentMonth ? Model.NextMonth : (DateOnly?)null;
+    var serbianCulture = new CultureInfo("sr-RS");
 }
 
 <h1>@ViewData["Title"]</h1>
 <p class="lead">
-    @Model.ServiceName with @Model.BarberName · @Model.Price.ToString("C") · @Model.DurationMinutes minutes
+    @Model.ServiceName with @Model.BarberName · @Model.Price.ToString("C", serbianCulture) · @Model.DurationMinutes minutes
 </p>
 
 @if (TempData["BookingError"] is string bookingError)
@@ -97,7 +99,7 @@ else
                             <p><strong>Usluga:</strong> @Model.ServiceName</p>
                             <p><strong>Datum:</strong> @Model.SelectedDate.ToString("dd.MM.yyyy.")</p>
                             <p><strong>Vreme:</strong> @slot.DisplayTime</p>
-                            <p><strong>Cena:</strong> @Model.Price.ToString("C")</p>
+                            <p><strong>Cena:</strong> @Model.Price.ToString("C", serbianCulture)</p>
                         </div>
                         <div class="modal-footer">
                             <form asp-action="Confirm" method="post">

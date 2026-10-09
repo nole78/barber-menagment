@@ -2,10 +2,10 @@
 <form method="post">
     <input asp-for="Id" type="hidden"/>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control"/><span asp-validation-for="Name" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Price" class="form-label"></label><input asp-for="Price" class="form-control"/><span asp-validation-for="Price" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="DurationMinutes" class="form-label"></label><input asp-for="DurationMinutes" class="form-control"/><span asp-validation-for="DurationMinutes" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Name" class="form-label" style="color: #f28a2e"></label><input asp-for="Name" class="form-control"/><span asp-validation-for="Name" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Description" class="form-label" style="color: #f28a2e"></label><textarea asp-for="Description" class="form-control"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Price" class="form-label" style="color: #f28a2e"></label><input asp-for="Price" class="form-control"/><span asp-validation-for="Price" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="DurationMinutes" class="form-label" style="color: #f28a2e"></label><input asp-for="DurationMinutes" class="form-control"/><span asp-validation-for="DurationMinutes" class="text-danger"></span></div>
     <fieldset class="mb-3">
         <legend class="h6">Poveži sa frizerima</legend>
         @foreach (var barber in Model.Barbers)
@@ -16,7 +16,14 @@
             </div>
         }
     </fieldset>
-    <button type="submit" class="btn btn-primary">Sačuvaj</button>
+    <div class="row g-2">
+        <div class="col">
+            <button type="submit" class="w-100 btn btn-primary">Sačuvaj</button>
+        </div>
+        <div class="col">
+            <a asp-action="Services" class="w-100 btn btn-danger">Odustani</a>
+        </div>
+    </div>
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>
