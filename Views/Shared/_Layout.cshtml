@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="theme-color" content="#10100f"/>
     <title>@ViewData["Title"] - BarberMenagment</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
@@ -10,36 +11,54 @@
     <link rel="stylesheet" href="~/BarberMenagment.styles.css" asp-append-version="true"/>
 </head>
 <body>
+<!-- THESIS: A calm, dark workbench for running a sharp barbershop; it refuses the generic admin template.
+     OWN-WORLD: Ink-black surfaces, warm copper-orange actions, restrained red warnings, and hard-edged editorial rows.
+     STORY: The owner sees today's rhythm immediately, checks the next client, and takes the next useful action.
+     FIRST VIEWPORT: Brand and navigation frame a live daily brief, with the next appointment and schedule in the main column.
+     FORM: Operate-first dashboard, built as a focused workbench rather than a metric-card grid. -->
+<a class="skip-link" href="#main-content">Preskoči na glavni sadržaj</a>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BarberMenagment</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+    <nav class="app-nav" aria-label="Glavna navigacija">
+        <div class="container app-nav__inner">
+            <a class="brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span class="brand__mark" aria-hidden="true">BM</span>
+                <span class="brand__text"><strong>Barber</strong><span>Management</span></span>
+            </a>
+            <button class="nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation" aria-controls="main-navigation"
+                    aria-expanded="false" aria-label="Otvori navigaciju">
+                <span></span><span></span><span></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            <div class="collapse app-nav__links" id="main-navigation">
+                <ul>
+                    <li>
+                        <a class="nav-link nav-link--active" asp-area="" asp-controller="Home" asp-action="Index">
+                            <span class="nav-icon" aria-hidden="true">⌂</span> Pregled
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    <li>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
+                            <span class="nav-icon" aria-hidden="true">◌</span> Privatnost
+                        </a>
                     </li>
                 </ul>
+                <div class="nav-profile">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span><small>Prijavljen kao</small><strong>Admin</strong></span>
+                </div>
             </div>
         </div>
     </nav>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
+<main id="main-content" role="main">
+    <div class="container page-shell">
         @RenderBody()
-    </main>
-</div>
+    </div>
+</main>
 
-<footer class="border-top footer text-muted">
+<footer class="app-footer">
     <div class="container">
-        &copy; 2026 - BarberMenagment - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <span>&copy; 2026 Barber Management</span>
+        <a asp-area="" asp-controller="Home" asp-action="Privacy">Politika privatnosti</a>
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
