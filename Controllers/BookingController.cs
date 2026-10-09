@@ -1,4 +1,5 @@
 using System.Data;
+using System.Globalization;
 using BarberMenagment.Data;
 using BarberMenagment.Models;
 using BarberMenagment.Models.Booking;
@@ -318,6 +319,7 @@ public class BookingController(
         BookingSelection selection,
         DateTime appointmentStart)
     {
+        var serbianCulture = new CultureInfo("sr-RS");
         return $"""
                 <h1>Appointment confirmed</h1>
                 <p>Hello {System.Net.WebUtility.HtmlEncode(clientFirstName)},</p>
@@ -326,7 +328,7 @@ public class BookingController(
                     <li><strong>Barber:</strong> {System.Net.WebUtility.HtmlEncode(selection.BarberName)}</li>
                     <li><strong>Service:</strong> {System.Net.WebUtility.HtmlEncode(selection.ServiceName)}</li>
                     <li><strong>Date and time:</strong> {appointmentStart:dddd, MMMM d, yyyy HH:mm}</li>
-                    <li><strong>Price:</strong> {selection.Price:C}</li>
+                    <li><strong>Price:</strong> {selection.Price.ToString("C", serbianCulture)}</li>
                 </ul>
                 """;
     }
