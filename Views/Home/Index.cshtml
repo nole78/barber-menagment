@@ -1,83 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Pregled";
+    ViewData["Title"] = "Home Page";
 }
 
-<section class="page-heading">
-    <div>
-        <p class="eyebrow">Četvrtak, 09. oktobar 2026.</p>
-        <h1>Dobro jutro, <span>Admin.</span></h1>
-        <p class="page-heading__intro">Evo kako izgleda današnji ritam salona.</p>
-    </div>
-    <a class="button button--primary" href="#schedule">
-        <span aria-hidden="true">+</span> Nova rezervacija
-    </a>
-</section>
-
-<section class="dashboard-grid" aria-label="Današnji pregled">
-    <div class="schedule-panel" id="schedule">
-        <div class="panel-heading">
-            <div>
-                <p class="eyebrow">Sledeće na redu</p>
-                <h2>Raspored za danas</h2>
-            </div>
-            <button class="icon-button" type="button" aria-label="Još opcija za raspored">•••</button>
-        </div>
-        <div class="next-appointment">
-            <div class="next-appointment__time"><strong>10:30</strong><span>za 18 min</span></div>
-            <div class="next-appointment__client">
-                <span class="avatar avatar--orange" aria-hidden="true">MP</span>
-                <div><strong>Marko Petrović</strong><span>Skin fade <i>•</i> 45 min</span></div>
-            </div>
-            <span class="appointment-status">Potvrđeno</span>
-        </div>
-        <div class="timeline">
-            <div class="timeline__row timeline__row--past">
-                <time>09:00</time><span></span><div><strong>Nikola Jovanović</strong><small>Klasično šišanje</small></div><em>Završeno</em>
-            </div>
-            <div class="timeline__row timeline__row--current">
-                <time>10:30</time><span></span><div><strong>Marko Petrović</strong><small>Skin fade</small></div><em>Uskoro</em>
-            </div>
-            <div class="timeline__row">
-                <time>11:30</time><span></span><div><strong>Vladimir Ilić</strong><small>Šišanje &amp; brada</small></div><em>Potvrđeno</em>
-            </div>
-            <div class="timeline__row">
-                <time>13:00</time><span></span><div><strong>Stefan Nikolić</strong><small>Beard trim</small></div><em>Potvrđeno</em>
-            </div>
-        </div>
-        <a class="panel-link" href="#schedule">Prikaži ceo raspored <span aria-hidden="true">→</span></a>
-    </div>
-
-    <aside class="side-column">
-        <div class="info-panel info-panel--accent">
-            <div class="panel-heading panel-heading--compact">
-                <p class="eyebrow">Dnevni učinak</p>
-                <span class="panel-symbol" aria-hidden="true">↗</span>
-            </div>
-            <div class="revenue"><strong>24.850</strong><span>RSD</span></div>
-            <p class="positive-change"><span aria-hidden="true">↑</span> 12,4% <small>u odnosu na prošli četvrtak</small></p>
-            <div class="mini-bars" aria-label="Raspodela prihoda tokom nedelje">
-                <span style="height: 38%"></span><span style="height: 54%"></span><span style="height: 46%"></span><span style="height: 68%"></span><span class="mini-bars__active" style="height: 88%"></span><span style="height: 58%"></span><span style="height: 30%"></span>
-            </div>
-            <div class="mini-bars__labels"><span>Pon</span><span>Uto</span><span>Sre</span><span>Čet</span><span>Pet</span><span>Sub</span><span>Ned</span></div>
-        </div>
-        <div class="info-panel">
-            <div class="panel-heading panel-heading--compact">
-                <p class="eyebrow">Brze akcije</p>
-            </div>
-            <div class="quick-actions">
-                <a href="#schedule"><span aria-hidden="true">＋</span><span><strong>Dodaj termin</strong><small>Upiši novu rezervaciju</small></span><b aria-hidden="true">→</b></a>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy"><span aria-hidden="true">◒</span><span><strong>Postavke salona</strong><small>Upravljaj detaljima</small></span><b aria-hidden="true">→</b></a>
-            </div>
-        </div>
-    </aside>
-</section>
-
-<section class="bottom-section" aria-labelledby="activity-heading">
-    <div class="section-heading"><div><p class="eyebrow">Aktivnost</p><h2 id="activity-heading">Poslednje izmene</h2></div><a class="text-link" href="#activity-heading">Vidi sve <span aria-hidden="true">→</span></a></div>
-    <div class="activity-list">
-        <div class="activity-item"><span class="activity-icon activity-icon--orange" aria-hidden="true">✓</span><div><strong>Rezervacija potvrđena</strong><span>Marko Petrović · danas u 10:30</span></div><time>pre 4 min</time></div>
-        <div class="activity-item"><span class="activity-icon activity-icon--red" aria-hidden="true">!</span><div><strong>Termin otkazan</strong><span>Filip Stojanović · danas u 16:00</span></div><time>pre 28 min</time></div>
-        <div class="activity-item"><span class="activity-icon activity-icon--muted" aria-hidden="true">₽</span><div><strong>Uplata evidentirana</strong><span>Nikola Jovanović · 2.800 RSD</span></div><time>pre 1 sat</time></div>
-    </div>
-</section>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
