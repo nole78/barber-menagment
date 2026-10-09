@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+<!--
+THESIS: A calm, practical salon console that makes booking and daily operations feel deliberate, not generic.
+OWN-WORLD: Matte graphite surfaces, warm orange actions, and restrained red status signals with crisp utility typography.
+STORY: Visitors immediately understand where to book, manage appointments, or run the barber panel.
+FIRST VIEWPORT: A compact navigation bar leads into a focused content column with one clear primary action.
+FORM: Operate-first layout; replaces the default Bootstrap white scaffold with a structured, high-contrast salon workspace.
+-->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -10,35 +17,38 @@
     <link rel="stylesheet" href="~/BarberMenagment.styles.css" asp-append-version="true"/>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Radisav Fashion</a>
+<header class="site-header">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                <span class="brand-mark" aria-hidden="true">R</span>
+                <span>Radisav <span class="brand-muted">Fashion</span></span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+            <div class="navbar-collapse collapse justify-content-between">
+                <ul class="navbar-nav gap-sm-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Početna</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privatnost</a>
                     </li>
                     @if (User.IsInRole("Barber"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Barber" asp-action="Index">Frizerski panel</a>
+                            <a class="nav-link" asp-controller="Barber" asp-action="Index">Frizerski panel</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Barber" asp-action="Services">Usluge</a>
+                            <a class="nav-link" asp-controller="Barber" asp-action="Services">Usluge</a>
                         </li>
                     }
                     @if (User.IsInRole("Client"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Appointments">Moji termini</a>
+                            <a class="nav-link" asp-controller="Account" asp-action="Appointments">Moji termini</a>
                         </li>
                     }
                 </ul>
@@ -46,21 +56,21 @@
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <li class="nav-item">
-                            <span class="nav-link text-dark">@User.Identity.Name</span>
+                            <span class="nav-link user-label">@User.Identity.Name</span>
                         </li>
                         <li class="nav-item">
                             <form asp-controller="Account" asp-action="Logout" method="post">
-                                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                                <button type="submit" class="nav-link btn btn-link">Odjavi se</button>
                             </form>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Prijavi se</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="nav-link nav-link-cta" asp-controller="Account" asp-action="Register">Registracija</a>
                         </li>
                     }
                 </ul>
@@ -68,15 +78,16 @@
         </div>
     </nav>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
+<div class="container site-content">
+    <main role="main">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
+<footer class="site-footer">
     <div class="container">
-        &copy; 2026 - Radisav Fashion - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <span>&copy; 2026 Radisav Fashion</span>
+        <a asp-area="" asp-controller="Home" asp-action="Privacy">Privatnost</a>
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

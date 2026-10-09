@@ -4,19 +4,20 @@
 
 @if (User.IsInRole("Barber"))
 {
-    <div class="text-center">
-        <h1 class="display-4">Frizerski panel</h1>
+    <div class="home-hero">
+        <p class="eyebrow">Radisav Fashion / Operativa</p>
+        <h1>Frizerski panel</h1>
         <p class="lead">Upravljajte uslugama, smenama, internim i online terminima.</p>
         <a asp-controller="Barber" asp-action="Index" class="btn btn-primary btn-lg">Otvori panel</a>
     </div>
 }
 else
 {
-    <div class="text-center">
-        <h1 class="display-4">Radisav Fashion</h1>
+    <div class="home-hero">
+        <p class="eyebrow">Radisav Fashion / Barber studio</p>
+        <h1>Precizna nega kose i brade, bez čekanja.</h1>
         <p class="lead">Moderna nega kose i brade uz jednostavno online zakazivanje.</p>
-        <p>Posetite nas na adresi Bulevar Radisava 10. Radno vreme: ponedeljak–subota, 08:00–20:00.</p>
-        <p>Kontakt: +381 60 123 4567 · radisav@example.com</p>
+        <p class="home-details">Bulevar Radisava 10 · ponedeljak–subota, 08:00–20:00<br />+381 60 123 4567 · radisav@example.com</p>
         <a asp-controller="Booking" asp-action="SelectBarber" class="btn btn-primary btn-lg">Rezerviši termin</a>
     </div>
 }
