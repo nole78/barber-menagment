@@ -1,0 +1,117 @@
+@model BarberMenagment.Models.Booking.CalendarViewModel
+@{
+    ViewData["Title"] = "Choose an appointment time";
+    var previousMonth = Model.Month == Model.NextMonth ? Model.CurrentMonth : (DateOnly?)null;
+    var nextMonth = Model.Month == Model.CurrentMonth ? Model.NextMonth : (DateOnly?)null;
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead">
+    @Model.ServiceName with @Model.BarberName · @Model.Price.ToString("C") · @Model.DurationMinutes minutes
+</p>
+
+@if (TempData["BookingError"] is string bookingError)
+{
+    <div class="alert alert-warning">@bookingError</div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    @if (previousMonth.HasValue)
+    {
+        <a asp-action="Calendar"
+           asp-route-barberId="@Model.BarberId"
+           asp-route-serviceId="@Model.ServiceId"
+           asp-route-year="@previousMonth.Value.Year"
+           asp-route-month="@previousMonth.Value.Month"
+           class="btn btn-outline-secondary">Previous month</a>
+    }
+    else
+    {
+        <span></span>
+    }
+    <h2 class="h4 mb-0">@Model.Month.ToString("MMMM yyyy")</h2>
+    @if (nextMonth.HasValue)
+    {
+        <a asp-action="Calendar"
+           asp-route-barberId="@Model.BarberId"
+           asp-route-serviceId="@Model.ServiceId"
+           asp-route-year="@nextMonth.Value.Year"
+           asp-route-month="@nextMonth.Value.Month"
+           class="btn btn-outline-secondary">Next month</a>
+    }
+    else
+    {
+        <span></span>
+    }
+</div>
+
+<div class="row row-cols-2 row-cols-md-4 row-cols-lg-7 g-2 mb-4">
+    @foreach (var day in Model.Days)
+    {
+        <div class="col">
+            <a asp-action="Calendar"
+               asp-route-barberId="@Model.BarberId"
+               asp-route-serviceId="@Model.ServiceId"
+               asp-route-year="@Model.Month.Year"
+               asp-route-month="@Model.Month.Month"
+               asp-route-day="@day.Date.Day"
+               class="card h-100 text-decoration-none @(day.IsSelected ? "border-primary" : "") @(day.HasAvailableSlots ? "" : "opacity-50")">
+                <div class="card-body p-2 text-center">
+                    <div class="small">@day.Date.ToString("ddd")</div>
+                    <strong>@day.Date.Day</strong>
+                    @if (day.IsToday)
+                    {
+                        <div class="small text-primary">Today</div>
+                    }
+                    @if (day.HasAvailableSlots)
+                    {
+                        <div class="small text-success">Available</div>
+                    }
+                    else
+                    {
+                        <div class="small text-muted">No slots</div>
+                    }
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<h2 class="h4">Available times for @Model.SelectedDate.ToString("MMMM d, yyyy")</h2>
+@if (Model.AvailableSlots.Count == 0)
+{
+    <div class="alert alert-info">No available times for this date.</div>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-2">
+        @foreach (var slot in Model.AvailableSlots)
+        {
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#confirm-@slot.Start.ToString("HHmm")">@slot.DisplayTime</button>
+            <div class="modal fade" id="confirm-@slot.Start.ToString("HHmm")" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h2 class="modal-title h5">Potvrda termina</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button></div>
+                        <div class="modal-body">
+                            <p><strong>Frizer:</strong> @Model.BarberName</p>
+                            <p><strong>Usluga:</strong> @Model.ServiceName</p>
+                            <p><strong>Datum:</strong> @Model.SelectedDate.ToString("dd.MM.yyyy.")</p>
+                            <p><strong>Vreme:</strong> @slot.DisplayTime</p>
+                            <p><strong>Cena:</strong> @Model.Price.ToString("C")</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form asp-action="Confirm" method="post">
+                                <input type="hidden" name="BarberId" value="@Model.BarberId"/>
+                                <input type="hidden" name="ServiceId" value="@Model.ServiceId"/>
+                                <input type="hidden" name="AppointmentDateTime" value="@slot.Start.ToString("O")"/>
+                                <button type="submit" class="btn btn-primary">Potvrdi termin</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<a asp-action="SelectService" asp-route-barberId="@Model.BarberId" class="btn btn-link mt-3">Back to services</a>

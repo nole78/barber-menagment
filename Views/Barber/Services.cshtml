@@ -1,0 +1,38 @@
+@model IReadOnlyList<BarberMenagment.Models.Barber.ServiceListItemViewModel>
+@{
+    ViewData["Title"] = "Usluge";
+}
+
+<h1>Usluge</h1>
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+@if (TempData["ServiceError"] is string serviceError)
+{
+    <div class="alert alert-danger">@serviceError</div>
+}
+<a asp-action="CreateService" class="btn btn-primary mb-3">Dodaj uslugu</a>
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead><tr><th>Naziv</th><th>Cena</th><th>Trajanje</th><th>Frizeri</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.Name</td>
+                <td>@service.Price.ToString("C")</td>
+                <td>@service.DurationMinutes min</td>
+                <td>@service.AssignedBarberCount</td>
+                <td class="d-flex gap-2">
+                    <a asp-action="EditService" asp-route-id="@service.Id" class="btn btn-sm btn-outline-primary">Izmeni</a>
+                    <form asp-action="DeleteService" method="post">
+                        <input type="hidden" name="id" value="@service.Id"/>
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Obriši</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

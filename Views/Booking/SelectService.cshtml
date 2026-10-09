@@ -1,0 +1,38 @@
+@model BarberMenagment.Models.Booking.ServiceSelectionViewModel
+@{
+    ViewData["Title"] = "Choose a service";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead">Services offered by <strong>@Model.BarberName</strong>.</p>
+
+<div class="row g-4">
+    @foreach (var service in Model.Services)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5">@service.Name</h2>
+                    @if (!string.IsNullOrWhiteSpace(service.Description))
+                    {
+                        <p class="text-muted">@service.Description</p>
+                    }
+                    <p class="mb-3">@service.Price.ToString("C") · @service.DurationMinutes minutes</p>
+                    <a asp-action="Calendar"
+                       asp-route-barberId="@Model.BarberId"
+                       asp-route-serviceId="@service.Id"
+                       class="btn btn-primary mt-auto">
+                        Choose time
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Services.Count == 0)
+{
+    <div class="alert alert-info">This barber has no services assigned yet.</div>
+}
+
+<a asp-action="SelectBarber" class="btn btn-link mt-3">Back to barbers</a>

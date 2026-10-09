@@ -1,0 +1,28 @@
+@model BarberMenagment.Models.Booking.BarberSelectionViewModel
+@{
+    ViewData["Title"] = "Choose a barber";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead">Choose the barber for your appointment.</p>
+
+<div class="row g-4">
+    @foreach (var barber in Model.Barbers)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5">@barber.FullName</h2>
+                    <a asp-action="SelectService" asp-route-barberId="@barber.Id" class="btn btn-primary mt-auto">
+                        View services
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Barbers.Count == 0)
+{
+    <div class="alert alert-info">No barbers are currently available.</div>
+}

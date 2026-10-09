@@ -1,0 +1,53 @@
+@model IReadOnlyList<BarberMenagment.Models.Barber.BarberAppointmentListItemViewModel>
+@{
+    ViewData["Title"] = "Termini";
+}
+
+<h1>Aktivni budući termini</h1>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+@if (TempData["AppointmentError"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+@if (TempData["AppointmentWarning"] is string warningMessage)
+{
+    <div class="alert alert-warning">@warningMessage</div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Trenutno nema budućih aktivnih termina.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr><th>Datum i vreme</th><th>Klijent</th><th>Usluga</th><th>Tip</th><th>Cena</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var appointment in Model)
+            {
+                <tr>
+                    <td>@appointment.AppointmentDateTime.ToLocalTime().ToString("dd.MM.yyyy. HH:mm")</td>
+                    <td>@appointment.ClientName</td>
+                    <td>@appointment.ServiceName</td>
+                    <td>@appointment.AppointmentType</td>
+                    <td>@appointment.Price.ToString("C")</td>
+                    <td>
+                        <form asp-action="CancelAppointment" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="AppointmentId" value="@appointment.Id"/>
+                            <input name="Reason" class="form-control" required maxlength="1000" placeholder="Razlog otkazivanja"/>
+                            <button class="btn btn-outline-danger text-nowrap" type="submit">Otkaži</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
